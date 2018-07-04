@@ -20,10 +20,23 @@
 
     <script>
     //So we have a data set here of discrete integer values and we are setting our height with a bar padding variables for use later on. This pattern is quite common.
-    var w = 500;
-    var h = 500;
+    //var w = 500;
+    //var h = 500;
+    //var barPadding = 1;
+    
+    //Let's test that again, again the relationships between the values is maintained just within a smaller viewport.
+    
+    //var w = 300;
+    //var h = 300;
+    //var barPadding = 1;
+    
+    //let's put it to a much higher number again so there is a bit of an art to getting your proportions in your data set right so data visualizations is a mixture of art and science.
+    
+    var w = 800;
+    var h = 800;
     var barPadding = 1;
-
+    
+    
     var dataset = [
         450, 100, 100, 279, 500, 25, 350, 120, 80, 130,
         110, 102, 375, 200, 175, 168, 180, 230, 205,
@@ -36,6 +49,59 @@
 
     //var colWidth = w / dataset.length;
     //var barWidth = colWidth - barPadding;
+    
+    //  D3 Scaling - linear used for number values.  Ordinal is used for non-numeric values (names, places, etc).
+
+//  so what a linear scale allows you to do is work with the domain and the range. 
+
+ 
+    //var scale = d3.scale.linear()
+                        //.domain([0,500]);
+                        
+    //so let's go back and modify our our chart to allow for the value of 600 which is in our data set which exceeds the height of view the viewport.  Okay let's set our domain to 600 and we have our range set to 500 just like in our test.  
+    
+    
+   // var scale = d3.scale.linear()
+                //.domain([0,600])
+                //.range([0,500]);
+
+    ////what if we're not sure of the size of our data set at any given time before the data arrives well we can use what's called d3 max, so it'll set the domain to the highest value contained within the dataset, so you don't have to hard code again.  It frees you up and it makes the code more flexible. 
+    
+    
+    var scale = d3.scale.linear()
+                .domain([0, d3.max(dataset)])
+                .range([0, h]);
+
+    
+                        
+    
+                        
+//  There won't always be a direct mapping between your data points and actual pixel on the screen, so for example, if you're plotting a graph of some figures like sales figures and the sales are in the tens or hundreds of thousands, it's very unlikely you'll be able to create a bar graph with the same pixel height as the data, so in that case you need to specify the boundaries within which your data can be transformed and these boundaries are called a range, and usually make a range when you want to transform the value of raw data into corresponding pixel coordinates, so our domain allows for values up to 600 and our range allows for values up to 500.  So there's a constraint and if we enter in the values here and if we do a test, we can see that 600 is the maximum height at 600 that will be displayed is 500 pixels, and relative to that a value of 500 will display a value of 416.6, so the boundary of the range is 500.  So the range constrains our data within a viewport. 
+
+//  testing.
+    //var scale = d3.scale.linear()
+                //.domain([0,600])
+                //.range([0,500]);
+
+    //console.log(scale(0));
+    //console.log(scale(600));
+    //console.log(scale(500));
+
+
+
+//Think of the domain as the boundary between the lowest and highest value represented in your data set you can test these then by adding values so a value of 500 in our case because the domain is set to 500 Max will display at a scale of 1 to 1 and a value of 0 will display it's get scale 0 as we cans see here.
+    
+//if we then change the value to 400 for example which is less than the boundary max it will display as a percentage of total which is 0.8 400 is 0.8 of 500.
+//  testing
+
+    //console.log(scale(0));
+    //console.log(scale(500));
+    
+   // console.log(scale(0));
+    //console.log(scale(400));
+
+
+
 
     var svg = d3.select("#draw-here")
         .append("svg")
@@ -56,9 +122,16 @@
         })
 
 
-        // let's set the Y value for each bar and the height - d. and remember the length property is available on every array in JavaScript
+        // let's set the Y value for each bar and the height - d. and remember the length property is available on every array in JavaScript.
+        
+        // okay.  Run it and everything fits within the viewport it's very very powerful feature once this clicks you're really on your way with them with d3 what if we're not sure of the size of our data set at any given time before the data arrives well we can use what's called d3 max so it'll set the domain to the highest value contained within the data set so you don't have to hard code again it frees you up it makes the code more flexible let's test that again again the relationships between the values is maintained just within a smaller viewport let's put it to a much higher number again so there is a bit of an art to getting your proportions in your data set right so data visualizations is a mixture of art and science.
+
+        //.attr("y", function(d) {
+           // return h - d;
+        //})
+        ////D3 Scaling -  make some changes here so we use the scale function that was returned from the d3 scale. Modifying y value.
         .attr("y", function(d) {
-            return h - d;
+            return h - scale(d);
         })
         //Let's set the width and the width will be W divided by the data set length minus the barpadding. Lets check that now by running it.
         .attr("width", w / dataset.length - barPadding)
@@ -67,9 +140,9 @@
 
         //.attr("width", w / barWidth)
          //now let's set the rectangle height and it'll be d that'll be the actual value of the data at that point in the array.
-
+        //Modify our height and our y-values using the scale, and run it, everything is ok. 
         .attr("height", function(d) {
-            return d;
+            return scale(d);
         });
 
 
@@ -100,7 +173,7 @@
         
 //  Notice the Y value we are using the height minus d plus 14, so it'll be 14 pixels down from the top of the bar itself.
         .attr("y", function(d) {
-            return h - d + 14;
+            return h - scale(d)+ 14;
         })
         
 //  and we're setting some additional text properties, such as the font family default sans-serif and giving it a font size of 11 pixels.

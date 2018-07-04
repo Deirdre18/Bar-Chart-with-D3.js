@@ -79,4 +79,77 @@ now notice are the Y value were using the height minus D plus 14 so it'll be
 specifying the x-coordinate of our entry in the middle of each bar chart so you
 can see it there more informative richer we're moving along nicely we're now
 using d3 to programmatically bind data to SVG's and represent them in a visual
-format
+format.
+
+
+# D3 Scales.
+
+## This is an D3 lesson (from Code Institute Full-Stack Diploma course). Transcription from lessons, included in comments sections in the code. 
+
+# D3 scales.
+
+1. What is it?
+
+D3 Scales are JavaScript functions that take an input (commonly a number, date or a category). They then return a value (such as a color, a coordinate, a length or a radius).
+
+2. What does it do?
+
+D3 scales are typically used to transform (or ‘map’) data values into visual variables (such as position, length and colour).
+
+3. How do you use it?
+
+Pick a scale type, define what type of data will go in and what should come out, and in return you get a function that will convert values in the manner you specified.
+
+LESSON:
+Let's take another look at the bar chart we created in the last unit and in
+particular let's look at the data in our data set now in this unit we're going to
+look at ways of dealing with data sets that have values that are higher than
+the maximum value available in your viewport in your SVG viewport if we go
+back and take a look at the data set we'll see that the highest value in that
+dataset is 500 and that matches the height of the viewport you can see it's
+set there in our variable H is equal to 500 so the highest value will display
+within the viewport but if we change one of the values within the data set to say
+600 well that representation is off it's giving a false view of the of
+the data because it has been rendered outside the boundaries of the viewport
+now d3 has a way of handling that using what are called scales and there's a
+couple of different kinds of scale representations that in particular we'll
+be looking at a linear and ordinal linear is used for numeric values
+ordinal is used for non numeric values such as names for example in places so
+what a linear scale or what a scale allows you to do is work with the domain
+and the range think of the domain as the boundary between the lowest and highest
+value represented in your data set you can test these then by adding values so
+a value of 500 in our case because the domain is set to 500 Max will display at
+a scale of 1 to 1 and a value of 0 will display it's get scale 0 as we can see
+here if we then change the value to 400 for example which is less than the
+boundary max it will display as a percentage of total which is 0.8 400 is
+0.8 of 500
+now there won't always be a direct mapping between your data points and an
+actual pixel on the screen so for example if you're plotting a graph of of
+some figures like sales figures and the sales are in the tens or hundreds of
+thousands it's very unlikely you'll be able to create a bar graph with the same
+pixel height as the data so in that case you need to specify the boundaries
+within which your data can be transformed and these boundaries are
+called a range and usually make a range when you want to transform the value of
+raw data into corresponding pixel coordinates so our domain allows for
+values up to 600 and our range allows for values up to 500 so there's a
+constraint so if we enter in the values here if we do a test we can see that 600
+the maximum height that 600 will be displayed is 500 pixels and relative to
+that a value of 500 will display is 416 point 6 so the boundary of the range is
+500 so the range constrains our data within a viewport size so let's go back
+and modify our our chart to allow for the value of 600 which is in our data
+set which exceeds the height of view the viewport okay let's set our domain 600
+and we have our range set to 500 just like in our test file a moment ago
+to make some changes here so we use the scale function that was returned from
+the d3 scale so modify our height and our y-values using the scale okay run it
+and everything fits within the viewport it's very very powerful feature once
+this clicks you're really on your way with them with d3 what if we're not sure
+of the size of our data set at any given time before the data arrives well we can
+use what's called d3 max so it'll set the domain to the highest value
+contained within the data set so you don't have to hard code again it frees
+you up it makes the code more flexible
+let's test that again again the relationships between the values is
+maintained just within a smaller viewport
+let's put it to a much higher number again
+so there is a bit of an art to getting your proportions in your data set right
+so data visualizations is a mixture of art and science
+
