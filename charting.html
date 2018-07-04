@@ -1,0 +1,116 @@
+<!--This is an D3 lesson (from Code Institute Full-Stack Diploma course). Transcription from lessons, included in comments sections in the code.--> 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>D3 and Scalable Vector Graphics</title>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+</head>
+<body>
+    <!--At this point we have been introduced to SVG's - the fundamentals of scalable vector graphics. We've been introduced to the basics of D3 which manipulates and works on scalable vector graphics. But it does it programmatically using javascript. Now let's look at creating a bar chart similar to the one we created a couple of Units back but this time creating it programmatically using D3.-->
+    <h1>Data Visualisation</h1>
+
+    <h2>D3 Charting</h2>
+
+    <div id="draw-here"></div>
+
+    <script>
+    //So we have a data set here of discrete integer values and we are setting our height with a bar padding variables for use later on. This pattern is quite common.
+    var w = 500;
+    var h = 500;
+    var barPadding = 1;
+
+    var dataset = [
+        450, 100, 100, 279, 500, 25, 350, 120, 80, 130,
+        110, 102, 375, 200, 175, 168, 180, 230, 205,
+    ];
+    // We use our D3 object to create an SVG object. We're using Select and the Select ties our viewport to a div with an ID called draw-here. Once we've that done we then append an SVG as a child of that div and it's part of the document object model (DOM)and the height and the width of that viewport is determined by the h and w variables set out below.
+
+    //there you have it there's our bar chart you can see the heights you can see the padding and again the default color is black because unless you specify otherwise both text and textual elements will be rendered in black by default in the browser so let's refactor this a little bit just do a little bit of cleaning so let's set the column width.
+
+    //we can actually clean this up even more it's called the bar with so we can remove those and clean up our code. It doesn't necessarily improve our execution speed but it makes it a little bit more elegant and more readable - run it, okay and that works.
+
+    //var colWidth = w / dataset.length;
+    //var barWidth = colWidth - barPadding;
+
+    var svg = d3.select("#draw-here")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+
+
+    // now we're setting up our bar chart and have defined what the rectangle will look like, so we append a rectangle, going to give it its X&Y coordinates, its height and its width so let's set the x coordinate and again this would be a function and the function U takes in two parameters. Ours uses two parameters d and i. d is the data which is the actual value in a in the data set array and i is the index of that data and the x value is going to be the width divided by the data set length. Remember the length property is available on every array in JavaScript
+
+    svg.selectAll("rect")
+        .data(dataset)
+        .enter()
+        .append("rect")
+        .attr("x", function(d, i) {
+            return i * (w / dataset.length);
+        //.attr("x", function(d, i) {
+          //  return i * colWidth;
+        })
+
+
+        // let's set the Y value for each bar and the height - d. and remember the length property is available on every array in JavaScript
+        .attr("y", function(d) {
+            return h - d;
+        })
+        //Let's set the width and the width will be W divided by the data set length minus the barpadding. Lets check that now by running it.
+        .attr("width", w / dataset.length - barPadding)
+        
+        //so that's replace our earlier calculation with colWidth, then remove and clean up our code, replacing colWidth, with barWidth).
+
+        //.attr("width", w / barWidth)
+         //now let's set the rectangle height and it'll be d that'll be the actual value of the data at that point in the array.
+
+        .attr("height", function(d) {
+            return d;
+        });
+
+
+
+
+
+   svg.selectAll("text")
+       .data(dataset)
+        .enter()
+        .append("text")
+        .text(function(d) {
+            return d;
+        })
+        
+//now we would like to make our data visualization (our bar chart) that little bit more informative, that a little bit more visually visually richer, and in order to do that, let's display the actual values (the integer values) for each bar, represent them on the bar itself. In other words, the data entries are the datums inside in the dataset.  Let's display those on the bar, each bar element itself to provide a richer feedback to the viewer, so in this case we use a text object, again we bind the text to the dataset, that's where we get our values from.  So for each entry in the dataset, there will be a text object created.        
+        
+//  again we bind the text to the dataset, that's where we get our values from. So for each entry in the dataset, there will be a text object created.  
+    
+//    and we're specifying the x-coordinate of our entry in the middle of each bar chart so you can see it there more informative richer we're moving along nicely we're now using d3 to programmatically bind data to SVG's and represent them in a visual format.
+
+//  On the first line you can see there's a an attribute, it's an SVG attribute called text anchor and we're setting it to middle. It's a bit like a normal text editor such as word or so on you have left align, middle and right align, so we're Center aligning our text on the bar itself.
+        .attr("text-anchor", "middle")
+        
+//  we're specifying the x-coordinate of our entry in the middle of each bar chart so you can see it there more informative and richer
+        .attr("x", function(d, i) {
+            return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+        })
+        
+//  Notice the Y value we are using the height minus d plus 14, so it'll be 14 pixels down from the top of the bar itself.
+        .attr("y", function(d) {
+            return h - d + 14;
+        })
+        
+//  and we're setting some additional text properties, such as the font family default sans-serif and giving it a font size of 11 pixels.
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "11px")
+//  and we're going to fill the text element with the color white. You can use hex values as well we're just using the the web palette representation that limited web palette representation just for simplicity
+        .attr("fill", "white");
+        
+//  This is how we use d3 to programmatically bind data to SVG's and represent them in a visual format.
+
+    </script>
+</body>
+</html>
